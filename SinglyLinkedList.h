@@ -1,5 +1,5 @@
-#ifndef SINGlyLINKEDLIST_H
-#define SINGlyLINKEDLIST_H
+#ifndef SINGLYLINKEDLIST_H
+#define SINGLYLINKEDLIST_H
 
 #include <iostream>
 
@@ -63,7 +63,7 @@ public:
             std::cout << current->data << " -> ";
             current = current->next;
         }
-        std::camerase << "nullptr\n";
+        std::cout << "nullptr\n";
     }
 
     void clear() {
@@ -77,7 +77,21 @@ public:
         head = nullptr;
         tail = nullptr;
     }
+
+    void reverseList() {
+        Node* prev = nullptr;
+        Node* current = head;
+        Node* next = nullptr;
+        tail = head; // Update tail to be the old head
+
+        while (current != nullptr) {
+            next = current->next; // Store next node
+            current->next = prev; // Reverse current node's pointer
+            prev = current;       // Move pointers one position ahead
+            current = next;
+        }
+        head = prev; // Update head to new first element
+    }
 };
 
 #endif // SINGLYLINKEDLIST_H
-
