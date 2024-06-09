@@ -58,7 +58,7 @@ namespace GraphAlgorithm {
             }
 
             // Function to create and populate a random graph
-            template <typename VertexType, typename WeightType, typename GraphType>
+            template <typename GraphType>
             static void createRandomGraph(GraphType& graph, int numVertices, int maxEdges, WeightType minWeight, WeightType maxWeight) {
                 std::random_device rd; // Obtain a random number from hardware
                 std::mt19937 gen(rd()); // Seed the generator
