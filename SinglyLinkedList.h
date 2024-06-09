@@ -60,10 +60,13 @@ public:
     void print() const {
         Node* current = head;
         while (current != nullptr) {
-            std::cout << current->data << " -> ";
+            if (current != head) {
+                std::cout << " -> ";
+            }
+            std::cout << current->data;
             current = current->next;
         }
-        std::cout << "nullptr\n";
+        std::cout << "\n";
     }
 
     void clear() {
