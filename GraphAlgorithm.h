@@ -7,6 +7,7 @@
 #include <queue>
 #include <limits>
 #include <functional>
+#include <random>
 
 // Define the namespace GraphAlgorithm
 namespace GraphAlgorithm {
@@ -54,6 +55,30 @@ namespace GraphAlgorithm {
                 }
 
                 return buildPath(previous, destination);
+            }
+
+            // Function to create and populate a random graph
+            template <typename VertexType, typename WeightType, typename GraphType>
+            static void createRandomGraph(GraphType& graph, int numVertices, int maxEdges, WeightType minWeight, WeightType maxWeight) {
+                std::random_device rd; // Obtain a random number from hardware
+                std::mt19937 gen(rd()); // Seed the generator
+                std::uniform_int_distribution<> vertexDist(0, numVertices - 1);
+                std::uniform_real_distribution<WeightType> weightDist(minWeight, maxWeight);
+
+                // Add vertices
+                for (int i = 0; i < numVertices; ++i) {
+                    graph.addVertex(static_cast<VertexType>(i)); // Cast may not be necessary depending on VertexType
+                }
+
+                // Add edges
+                for (int i = 0; i < maxEdges; ++i) {
+                    int u = vertexDist(gen);
+                    int v = vertexDist(gen);
+                    if (u != v) { // No self-loops
+                        WeightType weight = weightDist(gen);
+                        graph.addEdge(u, v, weight);
+                    }
+                }
             }
 
         private:
