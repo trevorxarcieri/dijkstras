@@ -13,12 +13,12 @@ int main() {
     GraphAdjacencyMatrix<VertexType, WeightType> graphMatrix;
 
     // Parameters for the graph
-    int numVertices = 20;
-    int maxEdges = 50;
+    int numVertices = 100;
+    int maxEdges = 2500;
     WeightType minWeight = 1.0;
-    WeightType maxWeight = 10.0;
+    WeightType maxWeight = 50.0;
     int sourceVertex = 0;   // Starting vertex for Dijkstra's
-    int destinationVertex = 10; // Ending vertex for Dijkstra's
+    int destinationVertex = 50; // Ending vertex for Dijkstra's
 
     // Generate a random graph for both types
     GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::createRandomGraph<GraphAdjacencyList<int, double>>(graphList, numVertices, maxEdges, minWeight, maxWeight);
