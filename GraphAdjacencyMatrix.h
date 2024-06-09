@@ -4,6 +4,7 @@
 #include "Graph.h"
 #include <vector>
 #include <limits>
+#include <stdexcept>
 
 template <typename VertexType, typename WeightType>
 class GraphAdjacencyMatrix : public Graph<VertexType, WeightType> {

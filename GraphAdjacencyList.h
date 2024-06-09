@@ -5,6 +5,7 @@
 #include <vector>
 #include <list>
 #include <algorithm>
+#include <stdexcept>
 
 template <typename VertexType, typename WeightType>
 class GraphAdjacencyList : public Graph<VertexType, WeightType> {
