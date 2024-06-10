@@ -14,7 +14,7 @@ int main() {
 
     // Parameters for the graph
     int numVertices = 10;
-    int maxEdges = 25;
+    int maxEdges = 20;
     WeightType minWeight = 1.0;
     WeightType maxWeight = 10.0;
     int sourceVertex = 0;   // Starting vertex for Dijkstra's

@@ -3,8 +3,8 @@
 
 #include "Graph.h"
 #include "SinglyLinkedList.h"
+#include "MinHeap.h"
 #include <vector>
-#include <queue>
 #include <limits>
 #include <functional>
 #include <random>
@@ -24,15 +24,14 @@ namespace GraphAlgorithm {
                 std::vector<WeightType> distances(numVertices, std::numeric_limits<WeightType>::max());
                 std::vector<int> previous(numVertices, -1); // To store the path
                 std::vector<bool> visited(numVertices, false);
-                std::priority_queue<std::pair<WeightType, int>, std::vector<std::pair<WeightType, int>>, std::greater<std::pair<WeightType, int>>> minHeap;
+                MinHeap<std::pair<WeightType, int>> minHeap;  // Use MinHeap instead of std::priority_queue
 
                 // Initialize the source vertex
                 distances[source] = 0;
-                minHeap.push({0, source});
+                minHeap.insert({0, source});
 
-                while (!minHeap.empty()) {
-                    int u = minHeap.top().second;
-                    minHeap.pop();
+                while (!minHeap.isEmpty()) {
+                    auto [minWeight, u] = minHeap.extractMin();
 
                     if (visited[u]) {
                         continue;
@@ -50,7 +49,7 @@ namespace GraphAlgorithm {
                         if (!visited[v] && distances[u] != std::numeric_limits<WeightType>::max() && distances[u] + weight < distances[v]) {
                             distances[v] = distances[u] + weight;
                             previous[v] = u; // Store the path
-                            minHeap.push({distances[v], v});
+                            minHeap.insert({distances[v], v});
                         }
                     }
                 }
