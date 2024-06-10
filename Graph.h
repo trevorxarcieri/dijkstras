@@ -2,6 +2,7 @@
 #define GRAPH_H
 
 #include <vector>
+#include <iostream>
 
 template <typename VertexType, typename WeightType>
 class Graph {
@@ -24,11 +25,13 @@ public:
     virtual std::vector<std::pair<int, WeightType>> getNeighbors(int vertex) const = 0;
 
     // Get the weight of an edge between two vertices
-    virtual WeightType getEdgeWeight(int fromVertex, int toEntity) const = 0;
+    virtual WeightType getEdgeWeight(int fromVertex, int toVertex) const = 0;
 
     // Get number of vertices in the graph
     virtual int vertexCount() const = 0;
+
+    // Print the graph in a readable format
+    virtual void print() const = 0;
 };
 
 #endif // GRAPH_H
-

@@ -13,12 +13,12 @@ int main() {
     GraphAdjacencyMatrix<VertexType, WeightType> graphMatrix;
 
     // Parameters for the graph
-    int numVertices = 100;
-    int maxEdges = 2500;
+    int numVertices = 10;
+    int maxEdges = 25;
     WeightType minWeight = 1.0;
-    WeightType maxWeight = 50.0;
+    WeightType maxWeight = 10.0;
     int sourceVertex = 0;   // Starting vertex for Dijkstra's
-    int destinationVertex = 50; // Ending vertex for Dijkstra's
+    int destinationVertex = 5; // Ending vertex for Dijkstra's
 
     // Generate a random graph for both types
     GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::createRandomGraph<GraphAdjacencyList<int, double>>(graphList, numVertices, maxEdges, minWeight, maxWeight);
@@ -29,10 +29,12 @@ int main() {
     auto pathMatrix = GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::execute(graphMatrix, sourceVertex, destinationVertex);
 
     // Print the shortest paths
+    graphList.print(); // Print adjacency list graph
     std::cout << "Shortest path (Adjacency List) from vertex " << sourceVertex << " to vertex " << destinationVertex << ": ";
     pathList.print();
     std::cout << std::endl;
 
+    graphMatrix.print(); // Print adjacency matrix graph
     std::cout << "Shortest path (Adjacency Matrix) from vertex " << sourceVertex << " to vertex " << destinationVertex << ": ";
     pathMatrix.print();
     std::cout << std::endl;

@@ -5,6 +5,7 @@
 #include <vector>
 #include <limits>
 #include <stdexcept>
+#include <iomanip>
 
 template <typename VertexType, typename WeightType>
 class GraphAdjacencyMatrix : public Graph<VertexType, WeightType> {
@@ -70,6 +71,27 @@ public:
 
     int vertexCount() const override {
         return vertices.size();
+    }
+
+    void print() const override {
+        std::cout << "Graph (Adjacency Matrix Representation):" << std::endl;
+        std::cout << "   ";
+        for (int i = 0; i < vertices.size(); ++i) {
+            std::cout << " " << vertices[i] << "  ";
+        }
+        std::cout << std::endl;
+
+        for (int i = 0; i < matrix.size(); ++i) {
+            std::cout << vertices[i] << ": ";
+            for (int j = 0; j < matrix[i].size(); ++j) {
+                if (matrix[i][j] == noEdgeValue) {
+                    std::cout << "___ ";
+                } else {
+                    std::cout << std::fixed << std::setprecision(1) << matrix[i][j] << " ";
+                }
+            }
+            std::cout << std::endl;
+        }
     }
 };
 

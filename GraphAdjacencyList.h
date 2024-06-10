@@ -6,6 +6,7 @@
 #include <list>
 #include <algorithm>
 #include <stdexcept>
+#include <iomanip>
 
 template <typename VertexType, typename WeightType>
 class GraphAdjacencyList : public Graph<VertexType, WeightType> {
@@ -80,6 +81,17 @@ public:
 
     int vertexCount() const override {
         return numVertices;
+    }
+
+    void print() const override {
+        std::cout << "Graph (Adjacency List Representation):" << std::endl;
+        for (int i = 0; i < vertices.size(); ++i) {
+            std::cout << vertices[i] << " -> ";
+            for (const auto& edge : adjacencyList[i]) {
+                std::cout << "(" << vertices[edge.first] << ", " << std::fixed << std::setprecision(1) << edge.second << ") ";
+            }
+            std::cout << std::endl;
+        }
     }
 };
 
