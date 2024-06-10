@@ -2,7 +2,7 @@
 #define GRAPHADJACENCYMATRIX_H
 
 #include "Graph.h"
-#include <vector>
+#include <iostream>
 #include <limits>
 #include <stdexcept>
 #include <iomanip>
@@ -11,54 +11,82 @@
 template <typename VertexType, typename WeightType>
 class GraphAdjacencyMatrix : public Graph<VertexType, WeightType> {
 private:
-    std::vector<std::vector<WeightType>> matrix;
-    std::vector<VertexType> vertices;
+    WeightType** matrix;   // Pointer to pointer for 2D array
+    VertexType* vertices;  // Array for vertices
+    int capacity;          // Max number of vertices the graph can hold
+    int numVertices;       // Current number of vertices
     WeightType noEdgeValue;
 
 public:
-    GraphAdjacencyMatrix(WeightType noEdgeValue = std::numeric_limits<WeightType>::max())
-        : noEdgeValue(noEdgeValue) {}
+    GraphAdjacencyMatrix(int initCapacity = 10, WeightType noEdgeValue = std::numeric_limits<WeightType>::max())
+        : capacity(initCapacity), numVertices(0), noEdgeValue(noEdgeValue) {
+        vertices = new VertexType[capacity];
+        matrix = new WeightType*[capacity];
+        for (int i = 0; i < capacity; i++) {
+            matrix[i] = new WeightType[capacity];
+            std::fill(matrix[i], matrix[i] + capacity, noEdgeValue);
+        }
+    }
 
-    virtual ~GraphAdjacencyMatrix() {}
+    virtual ~GraphAdjacencyMatrix() {
+        for (int i = 0; i < capacity; i++) {
+            delete[] matrix[i];
+        }
+        delete[] matrix;
+        delete[] vertices;
+    }
 
     int addVertex(VertexType vertex) override {
-        int newIndex = vertices.size();
-        vertices.push_back(vertex);
-        // Resize each existing row in the matrix to accommodate the new vertex
-        for (auto& row : matrix) {
-            row.push_back(noEdgeValue);
+        if (numVertices == capacity) {
+            // Resize the matrix and vertices array when capacity is reached
+            resize();
         }
-        // Add a new row for the new vertex
-        matrix.push_back(std::vector<WeightType>(vertices.size(), noEdgeValue));
-        return newIndex;
+        vertices[numVertices] = vertex;
+        for (int i = 0; i <= numVertices; i++) {
+            matrix[i][numVertices] = noEdgeValue;
+            matrix[numVertices][i] = noEdgeValue;
+        }
+        return numVertices++;
     }
 
     void removeVertex(int vertexIndex) override {
-        if (vertexIndex < 0 || vertexIndex >= vertices.size()) {
+        if (vertexIndex < 0 || vertexIndex >= numVertices) {
             throw std::out_of_range("Vertex index out of range");
         }
-
-        // Remove the corresponding row
-        matrix.erase(matrix.begin() + vertexIndex);
-        // Remove the corresponding column from each remaining row
-        for (auto& row : matrix) {
-            row.erase(row.begin() + vertexIndex);
+        // Shift matrix columns left
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = vertexIndex; j < numVertices - 1; j++) {
+                matrix[i][j] = matrix[i][j + 1];
+            }
         }
-        // Remove the vertex from the list
-        vertices.erase(vertices.begin() + vertexIndex);
+        // Shift matrix rows up
+        for (int i = vertexIndex; i < numVertices - 1; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                matrix[i][j] = matrix[i + 1][j];
+            }
+        }
+        // Shift vertices array
+        for (int i = vertexIndex; i < numVertices - 1; i++) {
+            vertices[i] = vertices[i + 1];
+        }
+        numVertices--;
     }
 
     void addEdge(int fromVertex, int toVertex, WeightType weight) override {
-        matrix[fromVertex][toVertex] = weight;
+        if (fromVertex < numVertices && toVertex < numVertices) {
+            matrix[fromVertex][toVertex] = weight;
+        }
     }
 
     void removeEdge(int fromVertex, int toVertex) override {
-        matrix[fromVertex][toVertex] = noEdgeValue;
+        if (fromVertex < numVertices && toVertex < numVertices) {
+            matrix[fromVertex][toVertex] = noEdgeValue;
+        }
     }
 
     std::vector<std::pair<int, WeightType>> getNeighbors(int vertex) const override {
         std::vector<std::pair<int, WeightType>> neighbors;
-        for (int i = 0; i < matrix[vertex].size(); ++i) {
+        for (int i = 0; i < numVertices; i++) {
             if (matrix[vertex][i] != noEdgeValue) {
                 neighbors.emplace_back(i, matrix[vertex][i]);
             }
@@ -67,24 +95,27 @@ public:
     }
 
     WeightType getEdgeWeight(int fromVertex, int toVertex) const override {
-        return matrix[fromVertex][toVertex];
+        if (fromVertex < numVertices && toVertex < numVertices) {
+            return matrix[fromVertex][toVertex];
+        }
+        return noEdgeValue;
     }
 
     int vertexCount() const override {
-        return vertices.size();
+        return numVertices;
     }
 
     void print() const override {
         std::cout << "Graph (Adjacency Matrix Representation):" << std::endl;
         std::cout << "   ";
-        for (int i = 0; i < vertices.size(); ++i) {
+        for (int i = 0; i < numVertices; i++) {
             std::cout << " " << vertices[i] << "  ";
         }
         std::cout << std::endl;
 
-        for (int i = 0; i < matrix.size(); ++i) {
+        for (int i = 0; i < numVertices; i++) {
             std::cout << vertices[i] << ": ";
-            for (int j = 0; j < matrix[i].size(); ++j) {
+            for (int j = 0; j < numVertices; j++) {
                 if (matrix[i][j] == noEdgeValue) {
                     std::cout << "___ ";
                 } else {
@@ -94,7 +125,35 @@ public:
             std::cout << std::endl;
         }
     }
+
+private:
+    void resize() {
+        int newCapacity = capacity * 2;
+        VertexType* newVertices = new VertexType[newCapacity];
+        WeightType** newMatrix = new WeightType*[newCapacity];
+
+        for (int i = 0; i < newCapacity; i++) {
+            newMatrix[i] = new WeightType[newCapacity];
+            std::fill(newMatrix[i], newMatrix[i] + newCapacity, noEdgeValue);
+        }
+
+        for (int i = 0; i < numVertices; i++) {
+            newVertices[i] = vertices[i];
+            for (int j = 0; j < numVertices; j++) {
+                newMatrix[i][j] = matrix[i][j];
+            }
+        }
+
+        for (int i = 0; i < capacity; i++) {
+            delete[] matrix[i];
+        }
+        delete[] matrix;
+        delete[] vertices;
+
+        vertices = newVertices;
+        matrix = newMatrix;
+        capacity = newCapacity;
+    }
 };
 
 #endif // GRAPHADJACENCYMATRIX_H
-
