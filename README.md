@@ -1,7 +1,6 @@
 *The author of this project is __Trevor Arcieri__. Below is a brief note for the instructor regarding evaulation of the assignment:*
   ## Requirements Deviations
-  **There are no requirements deviations.** Still, there are a couple interesting features that I believe set this project apart from the minimum implied by the project description, and I'd like to highlight those here:
-  1. **Random graph generation**
+  **There are no requirements deviations.** In addition to meeting the requirements, there is additional functionality, mainly in random graph generation. I encourage you to run the program yourself multiple times and see the variability in graph construction.
 
   ## Notes to Run the Program
   * I used gcc on my Linux machine, and my command to run the program was the following:
