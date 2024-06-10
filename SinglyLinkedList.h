@@ -1,3 +1,6 @@
+// Author: Trevor Arcieri
+// Last Modified: 6/9/24
+
 #ifndef SINGLYLINKEDLIST_H
 #define SINGLYLINKEDLIST_H
 

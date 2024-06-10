@@ -1,3 +1,6 @@
+// Author: Trevor Arcieri
+// Last Modified: 6/9/24
+
 #include "GraphAdjacencyList.h"
 #include "GraphAdjacencyMatrix.h"
 #include "GraphAlgorithm.h"
