@@ -6,6 +6,7 @@
 #include <limits>
 #include <stdexcept>
 #include <iomanip>
+#include <cmath>
 
 template <typename VertexType, typename WeightType>
 class GraphAdjacencyMatrix : public Graph<VertexType, WeightType> {
@@ -87,7 +88,7 @@ public:
                 if (matrix[i][j] == noEdgeValue) {
                     std::cout << "___ ";
                 } else {
-                    std::cout << std::fixed << std::setprecision(1) << matrix[i][j] << " ";
+                    std::cout << std::fixed << std::setprecision(1) << round(matrix[i][j] * 10) / 10 << " ";
                 }
             }
             std::cout << std::endl;

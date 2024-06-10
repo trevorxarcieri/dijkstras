@@ -21,23 +21,19 @@ int main() {
     int destinationVertex = 5; // Ending vertex for Dijkstra's
 
     // Generate a random graph for both types
-    GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::createRandomGraph<GraphAdjacencyList<int, double>>(graphList, numVertices, maxEdges, minWeight, maxWeight);
-    GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::createRandomGraph<GraphAdjacencyMatrix<int, double>>(graphMatrix, numVertices, maxEdges, minWeight, maxWeight);
+    GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::createRandomGraph<GraphAdjacencyList<VertexType, WeightType>>(graphList, numVertices, maxEdges, minWeight, maxWeight);
+    GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::createRandomGraph<GraphAdjacencyMatrix<VertexType, WeightType>>(graphMatrix, numVertices, maxEdges, minWeight, maxWeight);
 
     // Execute Dijkstra's algorithm on both graphs
-    auto pathList = GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::execute(graphList, sourceVertex, destinationVertex);
-    auto pathMatrix = GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::execute(graphMatrix, sourceVertex, destinationVertex);
+    SinglyLinkedList<int> pathList = GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::execute(graphList, sourceVertex, destinationVertex);
+    SinglyLinkedList<int> pathMatrix = GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::execute(graphMatrix, sourceVertex, destinationVertex);
 
     // Print the shortest paths
-    graphList.print(); // Print adjacency list graph
-    std::cout << "Shortest path (Adjacency List) from vertex " << sourceVertex << " to vertex " << destinationVertex << ": ";
-    pathList.print();
+    graphList.print();
+    GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::printSSSP<GraphAdjacencyList<VertexType, WeightType>>(graphList, sourceVertex, destinationVertex, pathList);
     std::cout << std::endl;
-
-    graphMatrix.print(); // Print adjacency matrix graph
-    std::cout << "Shortest path (Adjacency Matrix) from vertex " << sourceVertex << " to vertex " << destinationVertex << ": ";
-    pathMatrix.print();
-    std::cout << std::endl;
+    graphMatrix.print();
+    GraphAlgorithm::SSSP::Dijkstra<VertexType, WeightType>::printSSSP<GraphAdjacencyMatrix<VertexType, WeightType>>(graphMatrix, sourceVertex, destinationVertex, pathMatrix);
 
     return 0;
 }

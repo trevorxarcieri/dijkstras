@@ -66,7 +66,7 @@ public:
             std::cout << current->data;
             current = current->next;
         }
-        std::cout << "\n";
+        std::cout << std::endl;
     }
 
     void clear() {

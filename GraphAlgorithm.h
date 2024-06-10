@@ -8,6 +8,7 @@
 #include <limits>
 #include <functional>
 #include <random>
+#include <cmath>
 
 // Define the namespace GraphAlgorithm
 namespace GraphAlgorithm {
@@ -81,6 +82,21 @@ namespace GraphAlgorithm {
                 }
             }
 
+            // Print the shortest path using the output from Dijkstra's algorithm
+            template <typename GraphType>
+            static void printSSSP(GraphType& graph, int source, int destination, SinglyLinkedList<int>& path) {
+                std::cout << "Source: " << source << " to Destination: " << destination << std::endl;
+
+                if (path.head->data == destination) {
+                    std::cout << "No path exists from " << source << " to " << destination << std::endl;
+                    return;
+                }
+
+                std::cout << "Shortest path from vertex " << source << " to vertex " << destination << ": ";
+                path.print();
+                std::cout << "Total Path Weight: " << std::fixed << std::setprecision(1) << round(getTotalWeight(graph, path) * 10) / 10 << std::endl;
+            }
+
         private:
             // Helper function to build the path from source to destination
             static SinglyLinkedList<int> buildPath(const std::vector<int>& previous, int destination) {
@@ -90,6 +106,28 @@ namespace GraphAlgorithm {
                 }
                 path.reverseList(); // Reverse the list to display from source to destination
                 return path;
+            }
+
+            // Helper function to calculate the total weight of a path
+            template <typename GraphType>
+            static WeightType getTotalWeight(const GraphType& graph, const SinglyLinkedList<int>& path) {
+                if (path.head == nullptr) {
+                    throw std::invalid_argument("Path cannot be empty to calculate weight.");
+                }
+
+                WeightType totalWeight = 0;
+                SinglyLinkedList<int>::Node *cur = path.head;
+                int from = cur->data;
+                SinglyLinkedList<int>::Node *tail = path.tail;
+
+                while (cur != tail) {
+                    cur = cur->next;
+                    int to = cur->data;
+                    totalWeight += graph.getEdgeWeight(from, to);
+                    from = to;
+                }
+
+                return totalWeight;
             }
         };
 
